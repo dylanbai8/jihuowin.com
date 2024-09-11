@@ -22,7 +22,7 @@ echo.
 echo. 1.Installing root certificate !
 echo -------------------------------------------------
 echo.
-echo. I need some time , Just wait patiently ...
+echo. Need some time , Just wait patiently ...
 echo.
 
 %windir%\System32\cscript.exe //nologo %windir%\System32\slmgr.vbs /rilc 1>nul 2>nul
@@ -48,7 +48,7 @@ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SoftwareProtection
 echo -------------------------------------------------
 echo.
 echo. All done, you can close cmd now !
-timeout 10
+timeout 10 1>nul 2>nul
 slmgr.vbs /xpr 1>nul 2>nul
 echo.
 echo.
@@ -60,7 +60,7 @@ exit
 echo.
 echo. Error, unable to release certificate ! Please run as administrator !
 echo -------------------------------------------------
-timeout 10
+timeout 10 1>nul 2>nul
 echo.
 echo.
 echo.

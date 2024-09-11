@@ -37,7 +37,7 @@ echo.
 echo -------------------------------------------------
 echo.
 echo. All done, you can close cmd now !
-timeout 10
+timeout 10 1>nul 2>nul
 echo.
 echo.
 echo.

@@ -68,7 +68,7 @@ echo.
 echo -------------------------------------------------
 echo.
 echo. All done, you can close cmd now !
-timeout 10
+timeout 10 1>nul 2>nul
 echo.
 echo.
 echo.
@@ -79,6 +79,7 @@ echo.
 echo -------------------------------------------------
 echo.
 echo. Error! Did you install Office incorrectly ?
+timeout 10 1>nul 2>nul
 echo.
 echo.
 echo.
