@@ -48,6 +48,7 @@ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SoftwareProtection
 echo -------------------------------------------------
 echo.
 echo. All done, you can close cmd now !
+timeout 10
 slmgr.vbs /xpr 1>nul 2>nul
 echo.
 echo.
