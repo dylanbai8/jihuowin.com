@@ -43,17 +43,7 @@ sup {font-size:0.5em;color:#00AEED;}
 </style>
 
 <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
-<script type="text/javascript">
-    $(function(){
-        $("span").on("click", function(){
-            var selection = window.getSelection();        
-            selection.removeAllRanges();
-            var range = document.createRange();
-            range.selectNodeContents(document.getElementById($(this).attr('id'))); //span需要设置id
-            selection.addRange(range);
-        })
-    })
-</script>
+<script src="./js/header.js"></script>
 
 <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
 <script>LA.init({id:"KSQL47xUeK9yYspz",ck:"KSQL47xUeK9yYspz"})</script>
