@@ -8,17 +8,10 @@ echo.
 echo. Convert to Windows Enterprise G for Government
 echo -------------------------------------------------
 
-set _Args=%*
-if "%~1" NEQ "" (
-  set _Args=%_Args:"=%
-)
-fltmc 1>nul 2>nul || (
-  cd /d "%~dp0"
-  cmd /u /c echo Set UAC = CreateObject^("Shell.Application"^) : UAC.ShellExecute "cmd.exe", "/k cd ""%~dp0"" && ""%~dpnx0"" ""%_Args%""", "", "runas", 1 > "%temp%\GetAdmin.vbs"
-  "%temp%\GetAdmin.vbs"
-  del /f /q "%temp%\GetAdmin.vbs" 1>nul 2>nul
-  exit
-)
+::获取管理员权限
+%1 mshta vbscript:CreateObject("Shell.Application").ShellExecute("cmd.exe","/c %~s0 ::","","runas",1)(window.close)&&exit
+cd /d "%~dp0"
+
 set skudir=%windir%\System32\spp\tokens\skus\
 certutil -decode -f %~f0 %skudir%\EnterpriseG.cer 1>nul 2>nul
 if not exist "%skudir%\EnterpriseG.cer" goto error
