@@ -1,1 +1,0 @@
-slmgr /skms kms.jihuowin.com && slmgr /ato

