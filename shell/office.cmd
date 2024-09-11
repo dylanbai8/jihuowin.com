@@ -11,8 +11,8 @@ echo.
 echo. Downloading, please wait patiently ...
 echo -------------------------------------------------
 echo.
-curl -L -o tool.exe %url% && tool.exe
+curl -L -o tool.exe %url%
+tool.exe
 
-del /q %user%\tool.exe 1>nul 2>nul
 del /q %self% 1>nul 2>nul
 exit
