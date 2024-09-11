@@ -1,5 +1,4 @@
 @echo off
-cd /d "%~dp0"
 set self="%~f0"
 set user=%USERPROFILE%
 cd %user%
