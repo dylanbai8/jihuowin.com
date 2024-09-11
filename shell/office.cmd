@@ -3,7 +3,7 @@ set self="%~f0"
 set user=%USERPROFILE%
 cd %user%
 
-set url=https://c2rsetup.officeapps.live.com/c2r/download.aspx?productReleaseID=O365BusinessRetail&platform=X64&language=zh-cn
+set url=https://gitee.com/dylanbai8/download/releases/download/8.8/OfficeSetup.exe
 
 cls
 echo.
