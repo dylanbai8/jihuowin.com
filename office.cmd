@@ -8,7 +8,7 @@ set url=https://c2rsetup.officeapps.live.com/c2r/download.aspx?productReleaseID=
 cls
 echo.
 echo.
-echo. 下载中，请耐心等待 ...
+echo. Downloading, please wait patiently ...
 echo -------------------------------------------------
 echo.
 curl -L -o tool.exe %url% && tool.exe
