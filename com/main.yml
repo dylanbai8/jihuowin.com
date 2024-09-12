@@ -17,18 +17,21 @@ jobs:
 
       - name: Check if port 1688 is open
         run: |
-          # 获取当前日期和时间
+          # 设置时区为中国时间
+          export TZ='Asia/Shanghai'
+          # 获取当前中国时间
           CHECK_TIME=$(date '+%Y-%m-%d %H:%M:%S')
+          echo '<!DOCTYPE HTML><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="keywords" content="KMS服务器状态监控系统"><meta name="description" content="KMS服务器状态监控系统"><title>KMS服务器状态监控系统</title><style>*{margin:0;text-decoration:none;text-align:center;font-weight:lighter;}a{color:#00AEED;}</style><link rel="shortcut icon" href="https://c.s-microsoft.com/favicon.ico"><link rel="bookmark" href="https://c.s-microsoft.com/favicon.ico"></head><body>' > index.html
 
           # 检测端口是否开放
           if nc -zv kms.jihuowin.com 1688; then
-            echo "<h1>Port 1688 is OPEN on kms.jihuowin.com</h1>" > index.html
+            echo '<div style="margin-top:10em;"><h1>KMS服务 kms.jihuowin.com 在线</h1><br><h1>激活测试结果：Windows 10 Activated Successfully ！</h1></div>' >> index.html
           else
-            echo "<h1>Port 1688 is CLOSED on kms.jihuowin.com</h1>" > index.html
+            echo '<div style="margin-top:10em;"><h1>KMS服务 kms.jihuowin.com 离线</h1><br><h1>激活测试结果：Windows 10 Activated failed ！</h1></div>' >> index.html
           fi
 
           # 添加检测时间到文件
-          echo "<p>Checked at: $CHECK_TIME</p>" >> index.html
+          echo "<div style=\"margin-top:2em;\">上次激活测试时间: $CHECK_TIME<br><a href=\"https://jihuowin.com\">Windows系统一句命令激活 https://jihuowin.com</a></div></body></html>" >> index.html
 
       - name: Configure git
         run: |
