@@ -19,3 +19,4 @@
 在左侧导航栏中，找到 Actions，然后选择 General。
 在 Workflow permissions 部分，选择 Read and write permissions，并保存更改。
 
+https://github.com/dylanbai8/com.jihuowin/blob/main/.github/workflows/main.yml
