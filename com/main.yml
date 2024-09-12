@@ -1,4 +1,4 @@
-name: Port Check
+name: 检测KMS状态
 
 on:
   schedule:
