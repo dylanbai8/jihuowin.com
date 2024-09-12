@@ -22,5 +22,6 @@ for /f "tokens=*" %%i in (%input_file%) do (
     )
 )
 
-echo 检测完成，结果已保存到 %output_file%
+echo.
+echo. 检测完成，结果已保存到 %output_file%
 pause 1>nul 2>nul
