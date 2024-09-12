@@ -12,9 +12,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # 获取完整的历史记录，以便进行拉取和合并
 
       - name: Check if port 1688 is open
         run: |
+          # 获取当前日期和时间
+          CHECK_TIME=$(date '+%Y-%m-%d %H:%M:%S')
+
           # 检测端口是否开放
           if nc -zv kms.jihuowin.com 1688; then
             echo "<h1>Port 1688 is OPEN on kms.jihuowin.com</h1>" > index.html
@@ -22,16 +27,39 @@ jobs:
             echo "<h1>Port 1688 is CLOSED on kms.jihuowin.com</h1>" > index.html
           fi
 
-      - name: Commit changes
+          # 添加检测时间到文件
+          echo "<p>Checked at: $CHECK_TIME</p>" >> index.html
+
+      - name: Configure git
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@users.noreply.github.com'
+
+      - name: Stash changes before pulling
+        run: |
+          # 暂存当前更改
           git add index.html
-          git commit -m "Update port status"
+          git stash
+
+      - name: Pull latest changes
+        run: |
+          # 拉取并重排最新的远程更改
+          git pull origin main --rebase
+
+      - name: Apply stashed changes
+        run: |
+          # 应用暂存的更改
+          git stash pop || echo "No stashed changes to apply"
+
+      - name: Commit changes
+        run: |
+          # 提交更改
+          git add index.html
+          git commit -m "Update port status and time" || echo "No changes to commit"  # 如果没有变化，不会提交
         continue-on-error: true
 
       - name: Push changes
         run: |
-          git push
+          git push origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
