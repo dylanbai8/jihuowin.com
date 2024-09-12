@@ -1,0 +1,37 @@
+name: Port Check
+
+on:
+  schedule:
+    - cron: '0 * * * *' # 每小时运行一次
+  workflow_dispatch: # 手动触发
+
+jobs:
+  check_port:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Check if port 1688 is open
+        run: |
+          # 检测端口是否开放
+          if nc -zv kms.jihuowin.com 1688; then
+            echo "<h1>Port 1688 is OPEN on kms.jihuowin.com</h1>" > index.html
+          else
+            echo "<h1>Port 1688 is CLOSED on kms.jihuowin.com</h1>" > index.html
+          fi
+
+      - name: Commit changes
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@users.noreply.github.com'
+          git add index.html
+          git commit -m "Update port status"
+        continue-on-error: true
+
+      - name: Push changes
+        run: |
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

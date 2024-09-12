@@ -1,0 +1,21 @@
+在 GitHub 上检测 kms.jihuowin.com 的 1688 端口是否开放，并将结果写入仓库根目录的 index.html 文件。
+.github/workflows/main.yml
+
+触发条件：工作流设置为每小时运行一次，也可以手动触发。
+检查端口：使用 nc 命令检测 kms.jihuowin.com 的 1688 端口是否开放。
+更新 index.html：根据检测结果，更新仓库根目录的 index.html 文件。
+提交和推送更改：将更新后的文件提交到仓库。
+
+
+
+这个错误是由于 GitHub Actions 在尝试推送更改时，没有足够的权限访问你的仓库。
+默认情况下，GitHub Actions 使用的 GITHUB_TOKEN 只具有对仓库的读取权限，而推送更改需要写入权限。
+要解决这个问题，你需要确保 GitHub Actions 使用的 GITHUB_TOKEN 具有写入权限。以下是步骤：
+
+检查 GitHub Actions 的权限设置，在你的 GitHub 仓库设置中，确保 GitHub Actions 的权限设置为“允许写入”。路径如下：
+
+进入你的仓库。
+点击右上角的 Settings（设置）。
+在左侧导航栏中，找到 Actions，然后选择 General。
+在 Workflow permissions 部分，选择 Read and write permissions，并保存更改。
+
