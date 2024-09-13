@@ -14,7 +14,7 @@ Write-Host "===> Confirm the path and press any key ..."
 # 检查域名文件是否存在
 if (-not (Test-Path -Path $inputFile)) {
     Write-Host "===> Error! $currentPath\$inputFile"
-    exit
+    return
 }
 
 # 读取域名列表
