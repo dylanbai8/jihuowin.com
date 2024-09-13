@@ -1,2 +1,0 @@
-kms.jihuowin.com.	1	IN	A	121.37.146.102
-kms.jihuowin.com.	1	IN	A	1.1.1.1
