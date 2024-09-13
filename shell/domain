@@ -6,9 +6,9 @@ $inputFile = "domain.txt"
 $outputFile = "cloudflare_import.txt"
 
 # 提示信息
-Write-Host "$currentPath$inputFile"
-Write-Host "$currentPath$outputFile"
-Write-Host "Confirm the path and press any key ..."
+Write-Host "===> $currentPath\$inputFile"
+Write-Host "===> $currentPath\$outputFile"
+Write-Host "===> Confirm the path and press any key ..."
 [System.Console]::ReadKey() > $null
 
 # 读取域名列表
@@ -48,5 +48,5 @@ foreach ($domain in $domains) {
     }
 }
 
-Write-Host "All done ..."
-Write-Host "$currentPath$outputFile"
+Write-Host "===> All done ..."
+Write-Host "===> $currentPath$outputFile"

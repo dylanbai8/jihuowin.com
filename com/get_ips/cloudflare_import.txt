@@ -1,2 +1,2 @@
-1.12.54.119
-185.213.174.199
+kms.jihuowin.com.	1	IN	A	1.12.54.119
+kms.jihuowin.com.	1	IN	A	185.213.174.199
