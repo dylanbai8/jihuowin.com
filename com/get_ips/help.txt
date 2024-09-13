@@ -1,7 +1,11 @@
+
 txt去重
+
 https://tool.chinaz.com/tools/textquchong
 https://www.coolhub.top/tech-articles/kms_list.html
 
+
 使用：
+
 cd D:\a_git_root\jihuowin\com\get_ips
 irm jihuowin.com/shell/domain | iex
