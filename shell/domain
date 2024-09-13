@@ -1,0 +1,41 @@
+# 读取域名列表
+$domains = Get-Content -Path "domain.txt"
+
+# 输出文件路径
+$outputFile = "cloudflare_import.txt"
+
+# 清空输出文件内容
+Clear-Content -Path $outputFile -ErrorAction SilentlyContinue
+
+# 遍历每个域名
+foreach ($domain in $domains) {
+    # 获取域名解析的IP地址
+    try {
+        $ipAddresses = [System.Net.Dns]::GetHostAddresses($domain) | Where-Object { $_.AddressFamily -eq 'InterNetwork' }
+    } catch {
+        Write-Host "无法解析域名: $domain"
+        continue
+    }
+
+    # 检查每个IP地址的端口
+    foreach ($ip in $ipAddresses) {
+        $tcpConnection = New-Object System.Net.Sockets.TcpClient
+        try {
+            # 尝试连接1688端口
+            $tcpConnection.Connect($ip, 1688)
+            if ($tcpConnection.Connected) {
+                # 如果连接成功，将IP写入输出文件
+                $ipAddress = $ip.ToString()
+                Add-Content -Path $outputFile -Value $ipAddress
+                Write-Host "IP地址 $ipAddress 端口1688正常工作，已写入文件。"
+            }
+        } catch {
+            Write-Host "IP地址 $ip 端口1688无法连接。"
+        } finally {
+            # 关闭连接
+            $tcpConnection.Close()
+        }
+    }
+}
+
+Write-Host "脚本执行完毕，结果保存在 $outputFile"
