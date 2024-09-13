@@ -1,8 +1,18 @@
-# 读取域名列表
-$domains = Get-Content -Path "domain.txt"
-
+# 获取当前路径
+$currentPath = (Get-Location).Path
+# 输入文件路径
+$inputFile = "domain.txt"
 # 输出文件路径
 $outputFile = "cloudflare_import.txt"
+
+# 提示信息
+Write-Host "$currentPath$inputFile"
+Write-Host "$currentPath$outputFile"
+Write-Host "Confirm the path and press any key ..."
+[System.Console]::ReadKey() > $null
+
+# 读取域名列表
+$domains = Get-Content -Path "$inputFile"
 
 # 清空输出文件内容
 Clear-Content -Path $outputFile -ErrorAction SilentlyContinue
@@ -13,7 +23,7 @@ foreach ($domain in $domains) {
     try {
         $ipAddresses = [System.Net.Dns]::GetHostAddresses($domain) | Where-Object { $_.AddressFamily -eq 'InterNetwork' }
     } catch {
-        Write-Host "无法解析域名: $domain"
+        Write-Host "Parsing Error: $domain"
         continue
     }
 
@@ -26,11 +36,11 @@ foreach ($domain in $domains) {
             if ($tcpConnection.Connected) {
                 # 如果连接成功，将IP写入输出文件
                 $ipAddress = $ip.ToString()
-                Add-Content -Path $outputFile -Value $ipAddress
-                Write-Host "IP地址 $ipAddress 端口1688正常工作，已写入文件。"
+                Add-Content -Path $outputFile -Value "kms.jihuowin.com.	1	IN	A	$ipAddress"
+                Write-Host "Working! $ipAddress :1688"
             }
         } catch {
-            Write-Host "IP地址 $ip 端口1688无法连接。"
+            Write-Host "Error! $ipAddress :1688"
         } finally {
             # 关闭连接
             $tcpConnection.Close()
@@ -38,4 +48,5 @@ foreach ($domain in $domains) {
     }
 }
 
-Write-Host "脚本执行完毕，结果保存在 $outputFile"
+Write-Host "All done ..."
+Write-Host "$currentPath$outputFile"
