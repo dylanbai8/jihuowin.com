@@ -1,4 +1,4 @@
-name: Check IPs and Update Cloudflare
+name: Cloudflare域名解析
 
 on:
   # 手动触发工作流
@@ -42,50 +42,45 @@ jobs:
           # 使用nc命令检查IP 1688端口是否可达，设置超时时间为5秒
           if nc -zv -w 5 "$ip" 1688; then
             echo "IP $ip: Port 1688 is open."
-            
-            # 获取DNS记录ID 判断记录是否已存在
+
+            # 端口正常，获取DNS记录ID 判断记录是否已存在
             echo "Fetching DNS record for IP $ip..."
             response=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records?type=A&name=kms.v0v.bid&content=$ip" \
               -H "Authorization: Bearer $CF_API_TOKEN" \
               -H "Content-Type: application/json")
-              
+
             echo "Fetch DNS record response: $response"
 
             record_id=$(echo "$response" | jq -r '.result[0].id')
-            
+
             if [ "$record_id" != "null" ] && [ -n "$record_id" ]; then
-
-              echo "Deleted DNS record for $ip"
+              # 记录已存在，跳过添加
+              echo "DNS record for $ip already exists!"
             else
+              # 记录不存在，添加A记录到Cloudflare
               echo "No DNS record found for IP $ip"
-
-            # 添加A记录到Cloudflare
-            add_response=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records" \
-              -H "Authorization: Bearer $CF_API_TOKEN" \
-              -H "Content-Type: application/json" \
-              --data '{"type":"A","name":"kms.v0v.bid","content":"'"$ip"'","ttl":120,"proxied":false}')
-
-            echo "Add A record response: $add_response"
-
+              add_response=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records" \
+                -H "Authorization: Bearer $CF_API_TOKEN" \
+                -H "Content-Type: application/json" \
+                --data '{"type":"A","name":"kms.v0v.bid","content":"'"$ip"'","ttl":120,"proxied":false}')
+              echo "Add A record response: $add_response"
             fi
 
-
-
-
           else
+
             echo "IP $ip: Port 1688 is not open."
-            
-            # 获取DNS记录ID 判断记录是否已存在
+            # 端口异常，获取DNS记录ID 判断记录是否已存在
             echo "Fetching DNS record for IP $ip..."
             response=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records?type=A&name=kms.v0v.bid&content=$ip" \
               -H "Authorization: Bearer $CF_API_TOKEN" \
               -H "Content-Type: application/json")
-              
+
             echo "Fetch DNS record response: $response"
 
             record_id=$(echo "$response" | jq -r '.result[0].id')
-            
+
             if [ "$record_id" != "null" ] && [ -n "$record_id" ]; then
+              # 记录存在，从Cloudflare删除记录
               echo "Deleting DNS record with ID: $record_id"
               delete_response=$(curl -s -X DELETE "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records/$record_id" \
                 -H "Authorization: Bearer $CF_API_TOKEN" \
@@ -93,9 +88,9 @@ jobs:
               echo "Delete DNS record response: $delete_response"
               echo "Deleted DNS record for $ip"
             else
+              # 记录不存在，跳过删除
               echo "No DNS record found for IP $ip"
             fi
-
 
           fi
         done < ip.txt
