@@ -1,0 +1,58 @@
+name: Check IPs and Update Cloudflare
+
+on:
+  # 手动触发工作流
+  workflow_dispatch:
+  
+  # 每周运行一次，星期一 00:00 运行（可根据需求调整时间）
+  schedule:
+    - cron: '0 0 * * 1'
+
+jobs:
+  check-ips:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y curl jq
+
+    - name: Read and check IPs
+      id: check_ips
+      run: |
+        while read ip; do
+          # 使用nc命令检查IP 1688端口是否可达，设置超时时间为5秒
+          if nc -zv -w 5 "$ip" 1688; then
+            echo "IP $ip: Port 1688 is open."
+            echo "::set-output name=ip::$ip"
+            # 添加A记录到Cloudflare
+            curl -X POST "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records" \
+              -H "Authorization: Bearer $CF_API_TOKEN" \
+              -H "Content-Type: application/json" \
+              --data '{"type":"A","name":"kms.v0v.bid","content":"'"$ip"'","ttl":120,"proxied":false}' \
+              | jq .
+          else
+            echo "IP $ip: Port 1688 is not open."
+            # 删除已有的A记录
+            record_id=$(curl -X GET "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records?type=A&name=kms.v0v.bid&content=$ip" \
+              -H "Authorization: Bearer $CF_API_TOKEN" \
+              -H "Content-Type: application/json" | jq -r '.result[0].id')
+
+            if [ "$record_id" != "null" ]; then
+              curl -X DELETE "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records/$record_id" \
+                -H "Authorization: Bearer $CF_API_TOKEN" \
+                -H "Content-Type: application/json"
+              echo "Deleted DNS record for $ip"
+            else
+              echo "No DNS record found for $ip"
+            fi
+          fi
+        done < ip.txt
+
+    env:
+      CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+      CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
