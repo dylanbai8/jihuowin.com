@@ -45,7 +45,7 @@ jobs:
 
             # 端口正常，获取DNS记录ID 判断记录是否已存在
             echo "Fetching DNS record for IP $ip..."
-            response=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records?type=A&name=kms.v0v.bid&content=$ip" \
+            response=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records?type=A&name=$CF_DOMAIN&content=$ip" \
               -H "Authorization: Bearer $CF_API_TOKEN" \
               -H "Content-Type: application/json")
 
@@ -62,7 +62,7 @@ jobs:
               add_response=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records" \
                 -H "Authorization: Bearer $CF_API_TOKEN" \
                 -H "Content-Type: application/json" \
-                --data '{"type":"A","name":"kms.v0v.bid","content":"'"$ip"'","ttl":120,"proxied":false}')
+                --data '{"type":"A","name":"$CF_DOMAIN","content":"'"$ip"'","ttl":120,"proxied":false}')
               echo "Add A record response: $add_response"
             fi
 
@@ -71,7 +71,7 @@ jobs:
             echo "IP $ip: Port 1688 is not open."
             # 端口异常，获取DNS记录ID 判断记录是否已存在
             echo "Fetching DNS record for IP $ip..."
-            response=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records?type=A&name=kms.v0v.bid&content=$ip" \
+            response=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records?type=A&name=$CF_DOMAIN&content=$ip" \
               -H "Authorization: Bearer $CF_API_TOKEN" \
               -H "Content-Type: application/json")
 
@@ -98,3 +98,4 @@ jobs:
     env:
       CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
       CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+      CF_DOMAIN: ${{ secrets.CF_DOMAIN }}

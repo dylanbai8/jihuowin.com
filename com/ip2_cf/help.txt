@@ -8,6 +8,7 @@
 https://github.com/dylanbai8/com.jihuowin/settings/secrets/actions
 Repository secrets -- New repository secret
 
+CF_DOMAIN
 CF_ZONE_ID：你在 Cloudflare 中对应域名的 Zone ID (区域 ID)。
 CF_API_TOKEN：Cloudflare API Token，需有 DNS 编辑权限。
 
