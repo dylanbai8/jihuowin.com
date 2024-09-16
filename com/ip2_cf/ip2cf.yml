@@ -43,6 +43,22 @@ jobs:
           if nc -zv -w 5 "$ip" 1688; then
             echo "IP $ip: Port 1688 is open."
             
+            # 获取DNS记录ID 判断记录是否已存在
+            echo "Fetching DNS record for IP $ip..."
+            response=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records?type=A&name=kms.v0v.bid&content=$ip" \
+              -H "Authorization: Bearer $CF_API_TOKEN" \
+              -H "Content-Type: application/json")
+              
+            echo "Fetch DNS record response: $response"
+
+            record_id=$(echo "$response" | jq -r '.result[0].id')
+            
+            if [ "$record_id" != "null" ] && [ -n "$record_id" ]; then
+
+              echo "Deleted DNS record for $ip"
+            else
+              echo "No DNS record found for IP $ip"
+
             # 添加A记录到Cloudflare
             add_response=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records" \
               -H "Authorization: Bearer $CF_API_TOKEN" \
@@ -51,10 +67,15 @@ jobs:
 
             echo "Add A record response: $add_response"
 
+            fi
+
+
+
+
           else
             echo "IP $ip: Port 1688 is not open."
             
-            # 获取DNS记录ID
+            # 获取DNS记录ID 判断记录是否已存在
             echo "Fetching DNS record for IP $ip..."
             response=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/dns_records?type=A&name=kms.v0v.bid&content=$ip" \
               -H "Authorization: Bearer $CF_API_TOKEN" \
@@ -74,6 +95,8 @@ jobs:
             else
               echo "No DNS record found for IP $ip"
             fi
+
+
           fi
         done < ip.txt
 
