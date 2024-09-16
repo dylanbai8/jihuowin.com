@@ -1,0 +1,11 @@
+
+配置 GitHub Secrets
+为了安全地存储 Cloudflare 的 API Token 和 Zone ID，你需要在 GitHub 仓库中添加 Secrets：
+
+CF_API_TOKEN：Cloudflare API Token，需有 DNS 编辑权限。
+CF_ZONE_ID：你在 Cloudflare 中对应域名的 Zone ID。
+
+
+https://dash.cloudflare.com/profile/api-tokens
+https://github.com/dylanbai8/com.jihuowin/settings/secrets/actions
+https://github.com/dylanbai8/com.jihuowin/settings/environments
