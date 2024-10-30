@@ -3,5 +3,5 @@ $seturl = "https://raw.githubusercontent.com/ntdevlabs/tiny11builder/refs/heads/
 Invoke-WebRequest -Uri $seturl -OutFile "$Env:temp\tiny11Coremaker.ps1";
 $content = Get-Content -Path "$Env:temp\tiny11Coremaker.ps1" -Encoding Default;
 Set-Content -Path "$Env:temp\tiny11Coremaker.ps1" -Value $content -Encoding ASCII;
-Start-Process -FilePath "$Env:temp\tiny11Coremaker.ps1";
+powershell -ExecutionPolicy Bypass -File "$Env:temp\tiny11Coremaker.ps1";
 exit;
