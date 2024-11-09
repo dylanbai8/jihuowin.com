@@ -9,10 +9,11 @@ $(function(){
     })
 })
 
+// 复制span到剪贴板
 function copyToClipboard() {
   // 1. 获取所有 span 元素
   const spans = document.querySelectorAll('span');
-  
+
   // 2. 为每个 span 元素添加点击事件
   spans.forEach(span => {
     span.addEventListener('click', () => {
@@ -42,16 +43,16 @@ function showTooltip(element, message) {
   tooltip.style.pointerEvents = 'none';
   tooltip.style.transition = 'opacity 0.3s';
   tooltip.style.opacity = '0';
-  
+
   // 添加到文档中并定位
   document.body.appendChild(tooltip);
   const rect = element.getBoundingClientRect();
   tooltip.style.left = `${rect.left + window.pageXOffset}px`;
   tooltip.style.top = `${rect.top + window.pageYOffset - 30}px`;
-  
+
   // 显示提示
   setTimeout(() => tooltip.style.opacity = '1', 10);
-  
+
   // 3秒后隐藏并移除提示
   setTimeout(() => {
     tooltip.style.opacity = '0';
