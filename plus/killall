@@ -3,8 +3,7 @@ $isAdmin = [Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdent
 $adminRole = [Security.Principal.WindowsBuiltInRole]::Administrator
 
 if ($isAdmin.IsInRole($adminRole)) {
-    Write-Host "当前用户具有管理员权限，继续执行脚本。"
-    
+
     # 获取所有非系统进程并终止它们
     $processes = Get-Process | Where-Object { $_.Path -and $_.Path -notmatch 'C:\\Windows\\' }
 
@@ -18,5 +17,5 @@ if ($isAdmin.IsInRole($adminRole)) {
         }
     }
 } else {
-    Write-Host "当前用户没有管理员权限，请以管理员身份重新运行此脚本。"
+    Write-Host "Please run Powershell as administrator."
 }
