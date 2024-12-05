@@ -1,0 +1,22 @@
+# 检查当前是否以管理员权限运行
+$isAdmin = [Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()
+$adminRole = [Security.Principal.WindowsBuiltInRole]::Administrator
+
+if ($isAdmin.IsInRole($adminRole)) {
+    Write-Host "当前用户具有管理员权限，继续执行脚本。"
+    
+    # 获取所有非系统进程并终止它们
+    $processes = Get-Process | Where-Object { $_.Path -and $_.Path -notmatch 'C:\\Windows\\' }
+
+    foreach ($process in $processes) {
+        try {
+            Write-Host "Killing process: $($process.Name) with PID: $($process.Id)"
+            Stop-Process -Id $process.Id -Force
+        }
+        catch {
+            Write-Host "Failed to kill process: $($process.Name) with PID: $($process.Id)"
+        }
+    }
+} else {
+    Write-Host "当前用户没有管理员权限，请以管理员身份重新运行此脚本。"
+}
