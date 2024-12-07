@@ -1,0 +1,40 @@
+# 判断是否有管理员权限
+Function Check-Admin {
+    $currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $principal = New-Object Security.Principal.WindowsPrincipal($currentUser)
+    return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+}
+
+# 禁用所有开机自启动项
+Function Disable-StartupItems {
+    # 禁用注册表中的自启动项
+    $registryPaths = @(
+        "HKLM:\Software\Microsoft\Windows\CurrentVersion\Run",
+        "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
+    )
+    foreach ($path in $registryPaths) {
+        if (Test-Path $path) {
+            Get-ItemProperty -Path $path | Select-Object -ExpandProperty PSObject.Properties |
+            Where-Object { $_.MemberType -eq "NoteProperty" } |
+            ForEach-Object {
+                Remove-ItemProperty -Path $path -Name $_.Name -ErrorAction SilentlyContinue
+                Write-Output "Disabled autostart：$($_.Name)"
+            }
+        }
+    }
+
+    # 禁用任务计划中的自启动项
+    $tasks = Get-ScheduledTask | Where-Object { $_.TaskPath -like "\Startup\" -or $_.TaskName -match "startup|boot|开机" }
+    foreach ($task in $tasks) {
+        Disable-ScheduledTask -TaskName $task.TaskName -TaskPath $task.TaskPath -ErrorAction SilentlyContinue
+        Write-Output "Disabled scheduled task item：$($task.TaskName)"
+    }
+}
+
+# 主逻辑
+if (Check-Admin) {
+    Disable-StartupItems
+    Write-Output "All startup items have been disabled."
+} else {
+    Write-Error "please run this script as an administrator."
+}
