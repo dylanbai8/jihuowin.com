@@ -33,11 +33,14 @@ foreach ($path in $registryPaths) {
                 $sanitizedName = $key.PSChildName -replace "[\\/:*?""<>|]", "_"
                 $backupFile = Join-Path -Path $backupDir -ChildPath "$sanitizedName.reg"
 
+                # 转换路径为标准注册表格式
+                $regPath = $key.PSPath.Replace("HKEY_CLASSES_ROOT", "HKCR").Replace("HKEY_LOCAL_MACHINE", "HKLM").Replace("Registry::", "")
+
                 # 备份注册表项
                 try {
-                    reg export $key.PSPath $backupFile > $null
+                    reg export "$regPath" "$backupFile" > $null
                 } catch {
-                    # Write-Host "备份失败: $($key.PSPath)" -ForegroundColor Red
+                    # Write-Host "备份失败: $regPath" -ForegroundColor Red
                 }
 
                 # 删除该项
