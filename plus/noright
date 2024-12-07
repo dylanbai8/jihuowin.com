@@ -20,13 +20,13 @@ if (-not (Test-Path -Path $backupDir)) {
 
 # 快速处理非系统注册表键
 foreach ($path in $registryPaths) {
-    Write-Host "处理路径: $path" -ForegroundColor Yellow
+    # Write-Host "处理路径: $path" -ForegroundColor Yellow
     try {
         $keys = Get-ChildItem -Path "Registry::$path" -ErrorAction Stop
         foreach ($key in $keys) {
             # 系统项通常为 GUID 格式，跳过这些项
             if ($key.PSChildName -notmatch "^\{[0-9a-fA-F\-]{36}\}$") {
-                Write-Host "备份并禁用: $($key.PSChildName)" -ForegroundColor Green
+                # Write-Host "备份并禁用: $($key.PSChildName)" -ForegroundColor Green
 
                 # 备份注册表项
                 $backupFile = Join-Path -Path $backupDir -ChildPath "$($key.PSChildName).reg"
@@ -37,11 +37,11 @@ foreach ($path in $registryPaths) {
             }
         }
     } catch {
-        Write-Host "跳过路径或处理失败: $path" -ForegroundColor Red
+        # Write-Host "跳过路径或处理失败: $path" -ForegroundColor Red
     }
 }
 
-Write-Host "所有非系统右键菜单已禁用，并备份至 $backupDir" -ForegroundColor Cyan
+Write-Host "Backup to: $backupDir" -ForegroundColor Cyan
 
 } else {
     Write-Warning "Please run Powershell as administrator."
