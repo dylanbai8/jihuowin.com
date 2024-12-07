@@ -12,17 +12,14 @@ function Disable-StartupItems {
     )
 
     foreach ($key in $startupKeys) {
-        Write-Output "Processing registry key: $key"
         try {
             $items = Get-ItemProperty -Path $key
             $itemNames = $items.PSObject.Properties.Name | Where-Object { $_ -ne "PSPath" -and $_ -ne "PSParentPath" -and $_ -ne "PSChildName" -and $_ -ne "PSProvider" }
             foreach ($itemName in $itemNames) {
-                Write-Output "Disabling startup item: $itemName"
+                # Write-Output "Disabling startup item: $itemName"
                 Remove-ItemProperty -Path $key -Name $itemName -ErrorAction Stop
             }
-        } catch {
-            Write-Warning "Failed to process registry key $key: $_"
-        }
+        } catch {}
     }
 
     # 禁用开机启动文件夹中的项
@@ -32,16 +29,13 @@ function Disable-StartupItems {
     )
 
     foreach ($folder in $startupFolders) {
-        Write-Output "Processing startup folder: $folder"
+        # Write-Output "Processing startup folder: $folder"
         try {
             $files = Get-ChildItem -Path $folder -File
             foreach ($file in $files) {
-                Write-Output "Disabling startup file: $file"
                 Remove-Item -Path $file.FullName -ErrorAction Stop
             }
-        } catch {
-            Write-Warning "Failed to process folder $folder: $_"
-        }
+        } catch {}
     }
 
     Write-Output "All startup items have been disabled."
@@ -54,4 +48,11 @@ if ($isAdmin.IsInRole($adminRole)) {
 } else {
     Write-Host "Please run Powershell as administrator."
 }
+
+
+# 计算机\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
+# 计算机\HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
+
+# C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup
+# C:\Users\admin\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
 
