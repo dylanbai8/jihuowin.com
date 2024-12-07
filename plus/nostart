@@ -1,40 +1,58 @@
-# 判断是否有管理员权限
-Function Check-Admin {
-    $currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
-    $principal = New-Object Security.Principal.WindowsPrincipal($currentUser)
+# 判断是否以管理员身份运行
+function Is-Administrator {
+    $currentIdentity = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $principal = New-Object Security.Principal.WindowsPrincipal($currentIdentity)
     return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 }
 
 # 禁用所有开机自启动项
-Function Disable-StartupItems {
-    # 禁用注册表中的自启动项
-    $registryPaths = @(
+function Disable-StartupItems {
+    # 获取注册表中开机启动项
+    $startupKeys = @(
         "HKLM:\Software\Microsoft\Windows\CurrentVersion\Run",
         "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run"
     )
-    foreach ($path in $registryPaths) {
-        if (Test-Path $path) {
-            Get-ItemProperty -Path $path | Select-Object -ExpandProperty PSObject.Properties |
-            Where-Object { $_.MemberType -eq "NoteProperty" } |
-            ForEach-Object {
-                Remove-ItemProperty -Path $path -Name $_.Name -ErrorAction SilentlyContinue
-                Write-Output "Disabled autostart：$($_.Name)"
+
+    foreach ($key in $startupKeys) {
+        Write-Output "Processing registry key: $key"
+        try {
+            $items = Get-ItemProperty -Path $key
+            $itemNames = $items.PSObject.Properties.Name | Where-Object { $_ -ne "PSPath" -and $_ -ne "PSParentPath" -and $_ -ne "PSChildName" -and $_ -ne "PSProvider" }
+            foreach ($itemName in $itemNames) {
+                Write-Output "Disabling startup item: $itemName"
+                Remove-ItemProperty -Path $key -Name $itemName -ErrorAction Stop
             }
+        } catch {
+            Write-Warning "Failed to process registry key $key: $_"
         }
     }
 
-    # 禁用任务计划中的自启动项
-    $tasks = Get-ScheduledTask | Where-Object { $_.TaskPath -like "\Startup\" -or $_.TaskName -match "startup|boot|开机" }
-    foreach ($task in $tasks) {
-        Disable-ScheduledTask -TaskName $task.TaskName -TaskPath $task.TaskPath -ErrorAction SilentlyContinue
-        Write-Output "Disabled scheduled task item：$($task.TaskName)"
+    # 禁用开机启动文件夹中的项
+    $startupFolders = @(
+        [Environment]::GetFolderPath("CommonStartup"),
+        [Environment]::GetFolderPath("Startup")
+    )
+
+    foreach ($folder in $startupFolders) {
+        Write-Output "Processing startup folder: $folder"
+        try {
+            $files = Get-ChildItem -Path $folder -File
+            foreach ($file in $files) {
+                Write-Output "Disabling startup file: $file"
+                Remove-Item -Path $file.FullName -ErrorAction Stop
+            }
+        } catch {
+            Write-Warning "Failed to process folder $folder: $_"
+        }
     }
+
+    Write-Output "All startup items have been disabled."
 }
 
 # 主逻辑
-if (Check-Admin) {
+if (Is-Administrator) {
+    Write-Output "You have administrator privileges."
     Disable-StartupItems
-    Write-Output "All startup items have been disabled."
 } else {
-    Write-Error "please run this script as an administrator."
+    Write-Warning "This script requires administrator privileges. Please run it as an administrator."
 }
