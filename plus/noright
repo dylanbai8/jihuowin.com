@@ -9,7 +9,8 @@ $registryPaths = @(
     "HKCR\*\shellex\ContextMenuHandlers",
     "HKCR\Directory\shellex\ContextMenuHandlers",
     "HKCR\Drive\shellex\ContextMenuHandlers",
-    "HKCR\Folder\shellex\ContextMenuHandlers"
+    "HKCR\Folder\shellex\ContextMenuHandlers",
+    "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved"
 )
 
 # 定义备份目录
@@ -18,7 +19,7 @@ if (-not (Test-Path -Path $backupDir)) {
     New-Item -ItemType Directory -Path $backupDir | Out-Null
 }
 
-# 快速处理非系统注册表键
+# 快速处理注册表键
 foreach ($path in $registryPaths) {
     # Write-Host "处理路径: $path" -ForegroundColor Yellow
     try {
@@ -28,12 +29,23 @@ foreach ($path in $registryPaths) {
             if ($key.PSChildName -notmatch "^\{[0-9a-fA-F\-]{36}\}$") {
                 # Write-Host "备份并禁用: $($key.PSChildName)" -ForegroundColor Green
 
+                # 构造备份文件路径
+                $sanitizedName = $key.PSChildName -replace "[\\/:*?""<>|]", "_"
+                $backupFile = Join-Path -Path $backupDir -ChildPath "$sanitizedName.reg"
+
                 # 备份注册表项
-                $backupFile = Join-Path -Path $backupDir -ChildPath "$($key.PSChildName).reg"
-                reg export $key.PSPath $backupFile > $null
+                try {
+                    reg export $key.PSPath $backupFile > $null
+                } catch {
+                    # Write-Host "备份失败: $($key.PSPath)" -ForegroundColor Red
+                }
 
                 # 删除该项
-                Remove-Item -Path $key.PSPath -Recurse -Force -ErrorAction Stop
+                try {
+                    Remove-Item -Path $key.PSPath -Recurse -Force -ErrorAction Stop
+                } catch {
+                    # Write-Host "无法删除项: $($key.PSPath)" -ForegroundColor Red
+                }
             }
         }
     } catch {
@@ -41,7 +53,7 @@ foreach ($path in $registryPaths) {
     }
 }
 
-Write-Host "Backup to: $backupDir" -ForegroundColor Cyan
+# Write-Host "非系统右键菜单已禁用，并备份至 $backupDir" -ForegroundColor Cyan
 
 } else {
     Write-Warning "Please run Powershell as administrator."
