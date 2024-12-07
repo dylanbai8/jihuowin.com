@@ -17,5 +17,6 @@ if ($isAdmin.IsInRole($adminRole)) {
         }
     }
 } else {
-    Write-Host "Please run Powershell as administrator."
+    Write-Warning "Please run Powershell as administrator."
 }
+
