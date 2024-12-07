@@ -1,0 +1,43 @@
+# 检查当前是否以管理员权限运行
+$isAdmin = [Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()
+$adminRole = [Security.Principal.WindowsBuiltInRole]::Administrator
+
+if ($isAdmin.IsInRole($adminRole)) {
+
+# 定义需要处理的注册表路径
+$registryPaths = @(
+    "HKCR\*\shellex\ContextMenuHandlers",
+    "HKCR\Directory\shellex\ContextMenuHandlers",
+    "HKCR\Drive\shellex\ContextMenuHandlers",
+    "HKCR\Folder\shellex\ContextMenuHandlers"
+)
+
+# 备份并禁用注册表项
+foreach ($path in $registryPaths) {
+    Write-Host "处理路径: $path" -ForegroundColor Yellow
+    $key = Get-Item -Path "Registry::$path" -ErrorAction SilentlyContinue
+    if ($key) {
+        $subKeys = $key.GetSubKeyNames()
+        foreach ($subKey in $subKeys) {
+            # 备份非系统项
+            if ($subKey -notlike "{*}") { # 系统项通常为 GUID 格式
+                $fullPath = "$path\$subKey"
+                Write-Host "禁用: $fullPath" -ForegroundColor Green
+
+                # 备份当前值
+                $backupPath = "$env:TEMP\ContextMenuBackup_$($subKey).reg"
+                reg export "$fullPath" $backupPath > $null
+
+                # 删除该项
+                Remove-Item -Path "Registry::$fullPath" -Recurse -Force
+            }
+        }
+    }
+}
+
+Write-Host "所有非系统右键菜单已禁用！" -ForegroundColor Cyan
+
+} else {
+    Write-Warning "Please run Powershell as administrator."
+}
+
