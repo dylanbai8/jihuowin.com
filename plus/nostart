@@ -44,7 +44,6 @@ function Disable-StartupItems {
 
 # 禁用所有非系统计划任务
 function Disable-NonSystemScheduledTasks {
-    Write-Output "Disabling all non-system scheduled tasks..."
     $systemTasks = @(
         "Microsoft",  # Windows系统的计划任务通常位于 Microsoft 文件夹下
         "Windows"     # Windows系统的其他任务
@@ -66,13 +65,10 @@ function Disable-NonSystemScheduledTasks {
 
             # 如果不是系统任务，则禁用
             if (-not $isSystemTask) {
-                Write-Output "Disabling task: $($task.TaskName) in $($task.TaskPath)"
                 Disable-ScheduledTask -TaskName $task.TaskName -TaskPath $task.TaskPath -ErrorAction SilentlyContinue
             }
         }
-    } catch {
-        Write-Warning "Failed to process scheduled tasks: ${_}"
-    }
+    } catch {}
 
     Write-Output "All non-system scheduled tasks have been disabled."
 }
