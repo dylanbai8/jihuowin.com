@@ -12,30 +12,36 @@ $registryPaths = @(
     "HKCR\Folder\shellex\ContextMenuHandlers"
 )
 
-# 备份并禁用注册表项
+# 定义备份目录
+$backupDir = Join-Path -Path ([Environment]::GetFolderPath("MyDocuments")) -ChildPath "ContextMenuBackup"
+if (-not (Test-Path -Path $backupDir)) {
+    New-Item -ItemType Directory -Path $backupDir | Out-Null
+}
+
+# 快速处理非系统注册表键
 foreach ($path in $registryPaths) {
     Write-Host "处理路径: $path" -ForegroundColor Yellow
-    $key = Get-Item -Path "Registry::$path" -ErrorAction SilentlyContinue
-    if ($key) {
-        $subKeys = $key.GetSubKeyNames()
-        foreach ($subKey in $subKeys) {
-            # 备份非系统项
-            if ($subKey -notlike "{*}") { # 系统项通常为 GUID 格式
-                $fullPath = "$path\$subKey"
-                Write-Host "禁用: $fullPath" -ForegroundColor Green
+    try {
+        $keys = Get-ChildItem -Path "Registry::$path" -ErrorAction Stop
+        foreach ($key in $keys) {
+            # 系统项通常为 GUID 格式，跳过这些项
+            if ($key.PSChildName -notmatch "^\{[0-9a-fA-F\-]{36}\}$") {
+                Write-Host "备份并禁用: $($key.PSChildName)" -ForegroundColor Green
 
-                # 备份当前值
-                $backupPath = "$env:TEMP\ContextMenuBackup_$($subKey).reg"
-                reg export "$fullPath" $backupPath > $null
+                # 备份注册表项
+                $backupFile = Join-Path -Path $backupDir -ChildPath "$($key.PSChildName).reg"
+                reg export $key.PSPath $backupFile > $null
 
                 # 删除该项
-                Remove-Item -Path "Registry::$fullPath" -Recurse -Force
+                Remove-Item -Path $key.PSPath -Recurse -Force -ErrorAction Stop
             }
         }
+    } catch {
+        Write-Host "跳过路径或处理失败: $path" -ForegroundColor Red
     }
 }
 
-Write-Host "所有非系统右键菜单已禁用！" -ForegroundColor Cyan
+Write-Host "所有非系统右键菜单已禁用，并备份至 $backupDir" -ForegroundColor Cyan
 
 } else {
     Write-Warning "Please run Powershell as administrator."
