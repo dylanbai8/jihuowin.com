@@ -70,7 +70,7 @@ function Disable-NonSystemScheduledTasks {
         }
     } catch {}
 
-    Write-Output "All non-system scheduled tasks have been disabled."
+    Write-Output "`nAll non-system scheduled tasks have been disabled."
 }
 
 
