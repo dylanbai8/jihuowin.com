@@ -23,7 +23,7 @@ function Disable-StartupItems {
                 Remove-ItemProperty -Path $key -Name $itemName -ErrorAction Stop
             }
         } catch {
-            Write-Warning "Failed to process registry key $key: $_"
+            Write-Warning "Failed to process registry key $key: ${_}"
         }
     }
 
@@ -42,7 +42,7 @@ function Disable-StartupItems {
                 Remove-Item -Path $file.FullName -ErrorAction Stop
             }
         } catch {
-            Write-Warning "Failed to process folder $folder: $_"
+            Write-Warning "Failed to process folder $folder: ${_}"
         }
     }
 
