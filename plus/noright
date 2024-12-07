@@ -59,4 +59,3 @@ foreach ($path in $registryPaths) {
     Write-Warning "Please run Powershell as administrator."
 }
 
-
