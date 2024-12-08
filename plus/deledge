@@ -1,7 +1,24 @@
-$seturl = "https://jihuowin.com/plus/deledge.exe";
+# 定义变量
+$downloadUrl = "https://jihuowin.com/plus/deledge.exe"
+$outputPath = "$Env:temp\deledge.exe"
 
-Invoke-WebRequest -Uri $seturl -OutFile "$Env:temp\deledge.exe";
-$content = Get-Content -Path "$Env:temp\deledge.exe" -Encoding Default;
-Set-Content -Path "$Env:temp\deledge.exe" -Value $content -Encoding ASCII;
-Start-Process -FilePath "$Env:temp\deledge.exe";
-exit;
+# 下载 EXE 文件
+try {
+    Invoke-WebRequest -Uri $downloadUrl -OutFile $outputPath -UseBasicParsing
+} catch {
+    exit 1
+}
+
+# 检查文件是否存在
+if (-not (Test-Path -Path $outputPath)) {
+    exit 1
+}
+
+# 运行 EXE 文件
+try {
+    Start-Process -FilePath $outputPath -NoNewWindow -Wait
+    exit 1
+} catch {
+    exit 1
+}
+
