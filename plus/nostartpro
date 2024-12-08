@@ -104,3 +104,4 @@ foreach ($schedulerPath in $schedulerPaths) {
 # C:\Windows\System32\Tasks
 # C:\Windows\System32\Tasks\Microsoft
 
+
