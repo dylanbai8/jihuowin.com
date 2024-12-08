@@ -2,39 +2,39 @@
 $isAdmin = [Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()
 $adminRole = [Security.Principal.WindowsBuiltInRole]::Administrator
 
-# 禁用右键菜单的方法
-function Disable-ContextMenuHandlers {
-    param (
-        [string]$RegistryPath
-    )
+if ($isAdmin.IsInRole($adminRole)) {
 
-    # 获取所有项
-    $keys = Get-ChildItem -Path "Registry::$RegistryPath" -ErrorAction SilentlyContinue
+# 获取需要操作的注册表路径
+$registryPaths = @(
+    "HKCR\*\shellex\ContextMenuHandlers",
+    "HKCR\Directory\shellex\ContextMenuHandlers",
+    "HKCR\Directory\Background\shellex\ContextMenuHandlers",
+    "HKCR\Drive\shellex\ContextMenuHandlers"
+)
 
-    foreach ($key in $keys) {
-        try {
-            # 禁用右键菜单项
-            $keyPath = $key.PSPath
-            Rename-Item -Path $keyPath -NewName ($key.Name + "_Disabled") -ErrorAction SilentlyContinue
-            Write-Host "已禁用：$($key.Name)" -ForegroundColor Green
-        } catch {
-            Write-Host "无法禁用：$($key.Name)" -ForegroundColor Red
+# 临时备份注册表数据
+$backupPath = "$env:USERPROFILE\Desktop\ContextMenuHandlers_Backup.reg"
+reg export "HKCR" $backupPath
+
+Write-Host "注册表已备份到: $backupPath" -ForegroundColor Green
+
+# 遍历每个注册表路径，禁用第三方右键菜单
+foreach ($path in $registryPaths) {
+    try {
+        # 获取子项名称
+        $subkeys = Get-ChildItem -Path "Registry::$path" -ErrorAction SilentlyContinue
+        foreach ($subkey in $subkeys) {
+            # 重命名每个子项（前缀添加 "_disabled_"）
+            $newName = "_disabled_" + $subkey.PSChildName
+            Rename-Item -Path $subkey.PSPath -NewName $newName -ErrorAction Stop
+            Write-Host "已禁用: $subkey.PSPath" -ForegroundColor Yellow
         }
+    } catch {
+        Write-Host "操作失败: $path" -ForegroundColor Red
     }
 }
 
-if ($isAdmin.IsInRole($adminRole)) {
-
-# 执行禁用
-Write-Host "正在禁用右键菜单..." -ForegroundColor Yellow
-
-# 禁用文件相关的右键菜单
-Disable-ContextMenuHandlers -RegistryPath "HKEY_CLASSES_ROOT\*\shellex\ContextMenuHandlers"
-
-# 禁用文件夹相关的右键菜单
-Disable-ContextMenuHandlers -RegistryPath "HKEY_CLASSES_ROOT\Directory\shellex\ContextMenuHandlers"
-
-Write-Host "所有第三方右键菜单已禁用！" -ForegroundColor Cyan
+Write-Host "所有非系统右键菜单已禁用。" -ForegroundColor Green
 
 } else {
     Write-Warning "Please run Powershell as administrator."
