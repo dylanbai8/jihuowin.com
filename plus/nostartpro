@@ -1,0 +1,22 @@
+# 检查当前是否以管理员权限运行
+$isAdmin = [Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()
+$adminRole = [Security.Principal.WindowsBuiltInRole]::Administrator
+
+
+# 主逻辑
+if ($isAdmin.IsInRole($adminRole)) {
+
+} else {
+    Write-Warning "Please run Powershell as administrator."
+}
+
+
+# 计算机\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
+# 计算机\HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
+
+# C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup
+# C:\Users\admin\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+
+# C:\Windows\System32\Tasks
+# C:\Windows\System32\Tasks\Microsoft
+
