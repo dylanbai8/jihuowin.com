@@ -1,6 +1,6 @@
 # 定义变量
-$downloadUrl = "https://jihuowin.com/plus/files/deledge.exe"
-$outputPath = "$Env:temp\deledge.exe"
+$downloadUrl = "https://jihuowin.com/plus/files/delapp.exe"
+$outputPath = "$Env:temp\delapp.exe"
 
 # 下载 EXE 文件
 try {
