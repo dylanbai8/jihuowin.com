@@ -1,3 +1,6 @@
+# 禁止显示报错信息
+$ErrorActionPreference = "SilentlyContinue"
+
 # 定义变量
 $downloadUrl = "https://jihuowin.com/plus/files/deledge.exe"
 $outputPath = "$Env:temp\deledge.exe"
