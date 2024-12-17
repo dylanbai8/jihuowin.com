@@ -87,9 +87,9 @@ if ($isAdmin.IsInRole($adminRole)) {
     }
 
     # 设置计划任务权限
-    foreach ($schedulerPath in $schedulerPaths) {
-        Set-FolderPermissions -FolderPath $schedulerPath
-    }
+    # foreach ($schedulerPath in $schedulerPaths) {
+        # Set-FolderPermissions -FolderPath $schedulerPath
+    # }
 
     Write-Host "Disable adding any startup programs."
 
@@ -106,4 +106,4 @@ if ($isAdmin.IsInRole($adminRole)) {
 
 # C:\Windows\System32\Tasks
 # C:\Windows\System32\Tasks\Microsoft
-
+# C:\Windows\System32\Tasks\Microsoft\Windows\TextServicesFramework\MsCtfMonitor
