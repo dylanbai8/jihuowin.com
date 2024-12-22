@@ -3,7 +3,7 @@ $ErrorActionPreference = "SilentlyContinue"
 
 # 定义变量
 $downloadUrl = "https://jihuowin.com/plus/files/geek.exe"
-$outputPath = "$Env:temp\geek.exe"
+$outputPath = "$Env:USERPROFILE\Downloads\geek.exe"
 
 # 下载 EXE 文件
 try {
