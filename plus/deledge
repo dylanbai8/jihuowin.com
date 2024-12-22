@@ -19,7 +19,7 @@ if (-not (Test-Path -Path $outputPath)) {
 
 # 运行 EXE 文件
 try {
-    Start-Process -FilePath $outputPath -NoNewWindow
+    Start-Process -FilePath $outputPath
     exit 1
 } catch {
     exit 1
