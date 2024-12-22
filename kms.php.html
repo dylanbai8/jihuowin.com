@@ -1830,8 +1830,8 @@ https://learn.microsoft.com/zh-cn/windows-server/get-started/activation-slmgr-vb
 <span style="color:red" id="copy56">irm jihuowin.com/plus/nostartpro | iex</span><br><br>
 
 如果执行本站命令时卡住不动，使用以下命令为PowerShell配置代理。<br>
-<span style="color:red" id="copy57">netsh winhttp set proxy proxy-server="http://127.0.0.1:7890"; ping jihuowin.com</span><br>
-需已安装Clash，恢复默认代理: netsh winhttp reset proxy
+<span style="color:red" id="copy57">[System.Net.WebRequest]::DefaultWebProxy = New-Object System.Net.WebProxy("http://127.0.0.1:7890")</span><br>
+需已安装Clash，仅当前会话有效。
 
 </p>
 
