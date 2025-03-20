@@ -1,0 +1,109 @@
+# 禁止显示报错信息
+$ErrorActionPreference = "SilentlyContinue"
+
+# 检查当前是否以管理员权限运行
+$isAdmin = [Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()
+$adminRole = [Security.Principal.WindowsBuiltInRole]::Administrator
+
+# 设置注册表键的权限
+function Set-RegistryPermissions {
+    param (
+        [string]$RegistryPath
+    )
+
+    # Write-Host "设置注册表键权限: $RegistryPath"
+    # 获取注册表键的ACL
+    $acl = Get-Acl -Path $RegistryPath
+
+    # 创建拒绝权限规则（阻止Users组写入权限）
+    $denyRule = New-Object System.Security.AccessControl.RegistryAccessRule (
+        "Users",
+        "SetValue, CreateSubKey",
+        "Deny"
+    )
+
+    # 添加规则到ACL
+    $acl.SetAccessRule($denyRule)
+
+    # 应用ACL
+    Set-Acl -Path $RegistryPath -AclObject $acl
+    # Write-Host "权限设置完成: $RegistryPath"
+}
+
+# 设置文件夹权限
+function Set-FolderPermissions {
+    param (
+        [string]$FolderPath
+    )
+
+    # Write-Host "设置文件夹权限: $FolderPath"
+    # 获取文件夹的ACL
+    $acl = Get-Acl -Path $FolderPath
+
+    # 创建拒绝权限规则（阻止Users组写入和修改权限）
+    $denyRule = New-Object System.Security.AccessControl.FileSystemAccessRule (
+        "Users",
+        "Write, Delete, Modify",
+        "Deny"
+    )
+
+    # 添加规则到ACL
+    $acl.SetAccessRule($denyRule)
+
+    # 应用ACL
+    Set-Acl -Path $FolderPath -AclObject $acl
+    # Write-Host "权限设置完成: $FolderPath"
+}
+
+# 注册表路径
+$regPaths = @(
+    "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+    "HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"
+)
+
+# 文件夹路径
+$folderPaths = @(
+    "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup",
+    "C:\\Users\\admin\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup"
+)
+
+# 计划任务路径
+$schedulerPaths = @(
+    "C:\\Windows\\System32\\Tasks",
+    "C:\\Windows\\System32\\Tasks\\Microsoft"
+)
+
+# 主逻辑
+if ($isAdmin.IsInRole($adminRole)) {
+
+    # 设置注册表键权限
+    foreach ($regPath in $regPaths) {
+        Set-RegistryPermissions -RegistryPath $regPath
+    }
+
+    # 设置文件夹权限
+    foreach ($folderPath in $folderPaths) {
+        Set-FolderPermissions -FolderPath $folderPath
+    }
+
+    # 设置计划任务权限
+    # foreach ($schedulerPath in $schedulerPaths) {
+        # Set-FolderPermissions -FolderPath $schedulerPath
+    # }
+
+    Write-Host "Disable adding any startup programs."
+
+} else {
+    Write-Warning "Please run Powershell as administrator."
+}
+
+
+# 计算机\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
+# 计算机\HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
+
+# C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup
+# C:\Users\admin\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+
+# C:\Windows\System32\Tasks
+# C:\Windows\System32\Tasks\Microsoft
+# C:\Windows\System32\Tasks\Microsoft\Windows\TextServicesFramework\MsCtfMonitor
