@@ -40,10 +40,33 @@ sup {font-size:0.5em;color:#00AEED;}
     height: 27px;
     font-size: 0.8em;
 }
+.container{
+    width: 78%;
+    max-width: 460px;
+    margin: 0 auto;
+    padding: 25px 35px;
+    border: 1px dashed rgb(133, 101, 101);
+    border-radius: 15px;
+    background: #fff;
+    text-align:left;
+    word-break:break-all;
+    word-wrap:break-word;
+}
 </style>
 
 <script src="./js/jquery.min.js"></script>
 <script src="./js/header.js"></script>
+
+<script type="text/javascript">
+function HideOrShow(div_id) {
+    var current=document.getElementById(div_id);
+    if (current.style.display=="none") {
+        current.style.display="block";
+    } else {
+        current.style.display="none";
+    }
+}
+</script>
 
 <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
 <script>LA.init({id:"KSQL47xUeK9yYspz",ck:"KSQL47xUeK9yYspz"})</script>
@@ -113,14 +136,19 @@ sup {font-size:0.5em;color:#00AEED;}
 
 </div>
 
-<img src="./img/kmct.png" width="100em" style="margin-bottom:2em;"/>
+<img src="./img/win11.png" width="100em" style="margin-bottom:2em;"/>
 
-<p style="margin:0;padding:0;"><a href="/" target="_blank"><span style="color:red;">非常重要：域名已更变，请收藏当前网址!</span></a></p>
+<p style="margin:0;padding:0;"><a href="#" onclick="HideOrShow('js_out');"><span style="color:red;">推荐使用第一条命令，[进阶]是可选命令</span></a></p>
 
 <div style="line-height:2.2em;">
 <p style="margin:0;padding:0;">
 <a href="./kms.php">详细教程</a>&nbsp;&nbsp;<a href="./img.php">演示图例</a>&nbsp;&nbsp;<a href="./android.php">自建线路</a>&nbsp;&nbsp;<a href="./thanks.php" target="_blank">捐赠记录</a>
 </p>
+</div>
+
+<div id="js_out" class="container" style="margin-top:20px;overflow:hidden;display:none;">
+    <p><b>验证卡密后又跳回此页，解决办法：</b></p>
+    <p>你的浏览器开启了高级别安全模式。关闭相关功能，或者更换其它浏览器。</p>
 </div>
 
 <script src="./js/notice.js"></script>
