@@ -5,7 +5,7 @@ set kmsserver=kms.jihuowin.com
 
 cls
 echo.
-echo. [ 比永久更久 Windows10/11 系统激活 410年 ]
+echo. [ 比永久更久 Windows10/11 系统激活410年 ]
 echo -------------------------------------------------
 
 :: 尝试获取管理员权限
