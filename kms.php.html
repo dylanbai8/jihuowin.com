@@ -42,7 +42,7 @@ sup {font-size:0.5em;color:#00AEED;}
 }
 </style>
 
-  <style>
+<style>
     /* 悬浮目录容器 */
     .floating-toc {
       position: fixed;
@@ -52,7 +52,7 @@ sup {font-size:0.5em;color:#00AEED;}
       background-color: rgba(255, 255, 255, 0.95);
       border: 1px solid #ccc;
       border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      box-shadow: 0 0 0px rgba(0,0,0,0.2);
       padding: 10px;
       z-index: 9999;
       transition: all 0.3s ease;
@@ -114,7 +114,7 @@ sup {font-size:0.5em;color:#00AEED;}
     .toggle-btn:hover {
       background: #e0e0e0;
     }
-  </style>
+</style>
 
 <script src="./js/jquery.min.js"></script>
 <script src="./js/header.js"></script>
@@ -183,8 +183,8 @@ zh-cn_windows_11_consumer_editions_version_22h2_updated_may_2023_x64_dvd_a95c5a5
 SW_DVD9_Win_Pro_11_22H2_64BIT_ChnSimp_Pro_Ent_EDU_N_MLF_X23-12741.ISO
 </p>
 
-<h4>1.Windows 激活方法</h4>
 <section id="section1"></section>
+<h4>1.Windows 激活方法</h4>
 
 <p>
 1.打开 命令提示符 (管理员)<br><br>
@@ -233,8 +233,8 @@ slmgr /skms kms.jihuowin.com && slmgr /ato<br><br>
 全新装机请直接安装VOL版系统，本文末有下载链接。不推荐RTL转VOL的方式装机。
 </p>
 
-<h4>2.Office 激活方法</h4>
 <section id="section2"></section>
+<h4>2.Office 激活方法</h4>
 
 <p>
 目前看来 LTSC2021 可能是 Office VOL版的最后一个数字版本，往后只会以 “Microsoft 365 应用企业版” 的形式出现。<br>
@@ -518,8 +518,8 @@ cscript ospp.vbs /remhst<br>
 cscript ospp.vbs /rearm
 </p>
 
-<h4>6.批处理 一键工具脚本</h4>
 <section id="section3"></section>
+<h4>6.批处理 一键工具脚本</h4>
 
 <p>
 以下一键命令需要在 PowerShell 或 Terminal 内执行<br><br>
@@ -1207,8 +1207,8 @@ Visio Professional 2010<br>
 Visio Standard 2010<br>
 767HD-QGMWX-8QTDB-9G3R2-KHFGJ<br><br>
 
-<h4><strong>附3：Windows原版镜像 下载渠道</strong></h4>
 <section id="section5"></section>
+<h4><strong>附3：Windows原版镜像 下载渠道</strong></h4>
 
 <p>
 1>.微软官方 预览版（需要注册Windows预览体验计划成员）<br>
@@ -1807,9 +1807,8 @@ Outlook 单组件<br>
 <div id="mianze"></div>
 
 <p>
-
-免责声明<a href="https://github.com/dylanbai8/kmspro/issues" target="_blank" >（联系我们）</a>：<br><br>
 <section id="section6"></section>
+免责声明<a href="https://github.com/dylanbai8/kmspro/issues" target="_blank" >（联系我们）</a>：<br><br>
 
 1.本站所有展示的以及涉及到的包括但不限于文字、段落、教程、代码、脚本、软件等，均来自互联网文档以及微软官方文档收集整理。由于收集过程长且杂碎，未能一一标注出处。如果侵犯到了您的权益，请联系我们删除。<br><br>
 2.本站展示的所有 Windows/Office Product GVLK、以及激活步骤和代码全部来自微软官方公示文档。<br><br>
@@ -1893,28 +1892,27 @@ https://learn.microsoft.com/zh-cn/windows-server/get-started/activation-slmgr-vb
 以上主机如若涉嫌侵犯您的权益，请在 Github issues 留言强制剔除。
 </p>
 
-  <!-- 悬浮目录 -->
-  <div class="floating-toc" id="toc">
+<!-- 悬浮目录 -->
+<div class="floating-toc" id="toc">
     <button class="toggle-btn" onclick="toggleToc()">−</button>
-    <h4>目录</h4>
     <ul>
-      <li><a href="#section1">Windows 激活教程</a></li>
-      <li><a href="#section2">Office 激活教程</a></li>
-      <li><a href="#section3">批处理工具脚本</a></li>
-      <li><a href="#section4">KMS激活密钥 GVLK</a></li>
-      <li><a href="#section5">Windows原版镜像下载</a></li>
-      <li><a href="#section6">本站教程免责声明</a></li>
+        <li><a href="#section1">Windows 激活教程</a></li>
+        <li><a href="#section2">Office 激活教程</a></li>
+        <li><a href="#section3">批处理工具脚本</a></li>
+        <li><a href="#section4">KMS激活密钥 GVLK</a></li>
+        <li><a href="#section5">Windows原版镜像下载</a></li>
+        <li><a href="#section6">本站教程免责声明</a></li>
     </ul>
-  </div>
+</div>
 
-  <script>
+<script>
     function toggleToc() {
-      const toc = document.getElementById('toc');
-      const btn = toc.querySelector('.toggle-btn');
-      toc.classList.toggle('minimized');
-      btn.textContent = toc.classList.contains('minimized') ? '+' : '−';
+        const toc = document.getElementById('toc');
+        const btn = toc.querySelector('.toggle-btn');
+        toc.classList.toggle('minimized');
+        btn.textContent = toc.classList.contains('minimized') ? '+' : '−';
     }
-  </script>
+</script>
 
 </div>
 
