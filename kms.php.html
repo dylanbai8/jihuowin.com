@@ -102,7 +102,6 @@ sup {font-size:0.5em;color:#00AEED;}
 
     /* 缩小按钮样式 */
     .toggle-btn {
-      display: none;
       background: #f0f0f0;
       border: 1px solid #999;
       border-radius: 6px;
@@ -1925,12 +1924,8 @@ https://learn.microsoft.com/zh-cn/windows-server/get-started/activation-slmgr-vb
     }
 
     // 自动最小化：滚动时触发
-    let scrollTimeout;
     window.addEventListener('scroll', () => {
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(() => {
         minimizeToc();
-      }, 200); // 避免频繁触发
     });
 </script>
 
