@@ -1924,8 +1924,20 @@ https://learn.microsoft.com/zh-cn/windows-server/get-started/activation-slmgr-vb
     }
 
     // 自动最小化：滚动时触发
+    let scrollTimeout;
     window.addEventListener('scroll', () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
         minimizeToc();
+      }, 200); // 避免频繁触发
+    });
+
+    // 自动展开目录：点击目录按钮恢复（可选功能，不需要可忽略）
+    toc.addEventListener('click', () => {
+      if (isMinimized) {
+        toc.classList.remove('minimized');
+        isMinimized = false;
+      }
     });
 </script>
 
