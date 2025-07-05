@@ -1894,7 +1894,7 @@ https://learn.microsoft.com/zh-cn/windows-server/get-started/activation-slmgr-vb
 
 <!-- 悬浮目录 -->
 <div class="floating-toc" id="toc">
-    <button class="toggle-btn" onclick="toggleToc()">−</button>
+    <button class="toggle-btn"></button>
     <ul>
         <li><a href="#section1">◉ Windows 激活教程</a></li>
         <li><a href="#section2">◉ Office 激活教程</a></li>
@@ -1906,39 +1906,37 @@ https://learn.microsoft.com/zh-cn/windows-server/get-started/activation-slmgr-vb
 </div>
 
 <script>
-    function toggleToc() {
-        const toc = document.getElementById('toc');
-        const btn = toc.querySelector('.toggle-btn');
+const toc = document.getElementById('toc');
+const btn = toc.querySelector('.toggle-btn');
+let isMinimized = false;
+
+// 展开目录：点击目录按钮
+toc.addEventListener('click', () => {
+    if (isMinimized) {
         toc.classList.toggle('minimized');
-        btn.textContent = toc.classList.contains('minimized') ? '+' : '−';
-    }
-
-    const toc = document.getElementById('toc');
-    let isMinimized = false;
-
-    function minimizeToc() {
-      if (!isMinimized) {
-        toc.classList.add('minimized');
-        isMinimized = true;
-      }
-    }
-
-    // 自动最小化：滚动时触发
-    let scrollTimeout;
-    window.addEventListener('scroll', () => {
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(() => {
-        toggleToc();
-      }, 100); // 避免频繁触发
-    });
-
-    // 自动展开目录：点击目录按钮恢复（可选功能，不需要可忽略）
-    toc.addEventListener('click', () => {
-      if (isMinimized) {
-        toc.classList.remove('minimized');
+        btn.textContent = '−';
+        btn.style.display = 'none';
         isMinimized = false;
-      }
-    });
+    }
+});
+
+// 自动最小化：滚动时触发
+let scrollTimeout;
+window.addEventListener('scroll', () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+        minimizeToc();
+    }, 50); // 避免频繁触发
+});
+
+function minimizeToc() {
+    if (!isMinimized) {
+        toc.classList.toggle('minimized');
+        btn.textContent = '+';
+        btn.style.display = 'block';
+        isMinimized = true;
+    }
+}
 </script>
 
 </div>
