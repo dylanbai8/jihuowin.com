@@ -107,7 +107,6 @@ function HideOrShow(div_id) {
 }
 .hover-container {
     position: relative;
-    display: inline-block;
     display: flex;
     justify-content: center;
 }
@@ -143,9 +142,9 @@ function HideOrShow(div_id) {
 </div>
 
 <div id="js_out" class="container" style="margin-top:1.5em;margin-bottom:2em;overflow:hidden;display:none;">
-    <div class="hover-container">
+    <div class="hover-container" style="display:inline-block;">
         <p class="hover-text-ps" style="color:#00AEED">以下脚本在 PowerShell/Terminal 内执行</p>
-        <img src="./img/img_shell.png" class="hover-image-ps"/>
+        <img src="./img/img_shell.png" class="hover-image-ps" style="margin-top:6px;"/>
     </div>
     <p>一键激活410年 [付费服务]<br><span id="copy_90" class="ignore" style="color:#ababab">irm iex.jihuowin.com | iex</span></p>
     <p>一键安装Office LTSC版<br><span id="copy_91" class="ignore" style="color:#ababab">irm iex.jihuowin.com/ltsc | iex</span></p>
