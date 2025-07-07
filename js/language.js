@@ -3,6 +3,7 @@ translate.service.use('client.edge'); //设置机器翻译服务通道，直接�
 translate.language.translateLanguagesRange = ['chinese_simplified'];
 translate.images.add({
     "./img/help.png":"./img/help_en.png",
+    "./img/img_cmd.png":"./img/img_cmd_en.png",
 });
 
 translate.office.append('english',`
