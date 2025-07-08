@@ -1,8 +1,10 @@
 slmgr /skms kms.jihuowin.com && slmgr /ato
+dism /online /cleanup-image /restorehealth && sfc /scannow
 powershell -c "irm iex.jihuowin.com/help | iex"
 powershell -c "irm iex.jihuowin.com/ltsc | iex"
 powershell -c "irm iex.jihuowin.com/dism | iex"
 powershell -c "irm iex.jihuowin.com/chrome | iex"
 irm iex.jihuowin.com/killall | iex
 irm iex.jihuowin.com/startup | iex
+Resolve-DnsName kms.jihuowin.com
 powershell -c "start-process powershell -verb runas"
