@@ -1,7 +1,8 @@
 slmgr /skms kms.jihuowin.com && slmgr /ato
 powershell -c "irm iex.jihuowin.com/help | iex"
 powershell -c "irm iex.jihuowin.com/ltsc | iex"
+powershell -c "irm iex.jihuowin.com/dism | iex"
 powershell -c "irm iex.jihuowin.com/chrome | iex"
-powershell -c "irm iex.jihuowin.com/killall | iex"
-powershell -c "irm iex.jihuowin.com/startpro | iex"
+irm iex.jihuowin.com/killall | iex
+irm iex.jihuowin.com/startup | iex
 powershell -c "start-process powershell -verb runas"
