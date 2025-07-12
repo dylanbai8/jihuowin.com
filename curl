@@ -13,3 +13,4 @@ powershell -c "irm iex.jihuowin.com/edge | iex"
 irm iex.jihuowin.com/killall | iex
 irm iex.jihuowin.com/startup | iex
 powershell -c "start-process powershell -verb runas"
+powershell -c "irm iex.jihuowin.com/kmsip | iex"
