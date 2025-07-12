@@ -50,7 +50,7 @@ cscript "%ospp_path%" /unpkey:VMFTK 1>nul 2>nul
 cscript "%ospp_path%" /unpkey:H499R 1>nul 2>nul
 :: https://github.com/YerongAI/Office-Tool/blob/main/doc/Tech%20Articles/Products.md
 
-cscript "%ospp_path%" /inpkey:FXYTK-NJJ8C-GB6DW-3DYQT-6F7TH 1>nul 2>nul
+cscript "%ospp_path%" /inpkey:XJ2XN-FW8RK-P4HMP-DKDBV-GCVGB 1>nul 2>nul
 cscript "%ospp_path%" /sethst:%kmsserver% 1>nul 2>nul
 
 echo.
