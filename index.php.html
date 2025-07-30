@@ -140,6 +140,7 @@ function HideOrShow(div_id) {
 <div style="margin-top:2em;margin-bottom:2em;">
 <a href="./kms.php">详细教程</a>&nbsp;&nbsp;<a href="./img.php">演示图例</a>&nbsp;&nbsp;<a href="./android.php">自建线路</a>&nbsp;&nbsp;<a href="./thanks.php" target="_blank">捐赠记录</a>
 </div>
+<div id="result">正在获取数据...</div>
 
 <div id="js_out" class="container" style="margin-top:1.5em;margin-bottom:2em;overflow:hidden;display:none;">
     <div class="hover-container" style="display:inline-block;">
@@ -171,6 +172,25 @@ showAnnouncement(showtxt, 'auto', 'rgba(50, 50, 50, 0.9)');
 
 <script src="./js/translate.js"></script>
 <script src="./js/language.js"></script>
+
+<script>
+    fetch('https://com.jihuowin.com/')
+      .then(response => response.text())
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const content = doc.body.innerText;
+        const match = content.match(/上次激活测试时间: ([^\n]+)/);
+        if (match) {
+          document.getElementById('result').innerText = '上次激活测试时间: ' + match[1];
+        } else {
+          document.getElementById('result').innerText = '未找到激活时间';
+        }
+      })
+      .catch(error => {
+        document.getElementById('result').innerText = '请求失败: ' + error;
+      });
+  </script>
 
 </td>
 </tr>
