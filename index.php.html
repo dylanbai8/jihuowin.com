@@ -182,7 +182,7 @@ showAnnouncement(showtxt, 'auto', 'rgba(50, 50, 50, 0.9)');
         const content = doc.body.innerText;
         const match = content.match(/上次激活测试时间:\s*([0-9:\-\s]+)/);
         if (match) {
-          document.getElementById('isOnline').innerText = '上次激活测试时间: ' + match[1];
+          document.getElementById('isOnline').innerText = '[上次激活测试时间: ' + match[1] + ']';
         } else {
           document.getElementById('isOnline').innerText = '';
         }
